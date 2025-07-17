@@ -31,3 +31,6 @@ A new run will automatically be created when a new log is detected in your arcDP
     * Report issues or give thanks for GW2 Commanders Watch here: [https://github.com/theextendedname/GW2_Commanders_Watch/](https://github.com/theextendedname/GW2_Commanders_Watch/)
 
 ---
+
+
+<img width="1200" height="725" alt="Gw2_Commander_Watch" src="https://github.com/user-attachments/assets/7c4b84a1-cc5c-41d6-ba1c-f1d7d417079e" />

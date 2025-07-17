@@ -1,0 +1,13 @@
+.env
+Log_Archive/**
+GW2EICLI/**
+FightLogTemp/**
+/FightLog/**
+.vscode/**
+GW2_Cmd_Watch.exe
+SampleEliteInsightOutput.json
+Prompt_Plan.md
+spec.md
+config.json
+debug.log
+ELI3.conf

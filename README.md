@@ -20,6 +20,7 @@ A new run will automatically be created when a new log is detected in your arcDP
 
 ## Important Notes
 
+* **Get the Latest Release:** [Latest GW2_Commanders_Watch Release](https://github.com/theextendedname/GW2_Commanders_Watch/releases/latest)
 * **arcDPS Log Location:** By default, arcDPS logs are found in `C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs`.
     * **Learn more:** [https://www.deltaconnected.com/arcdps/](https://www.deltaconnected.com/arcdps/)
 * **GW2 Commanders Watch Data:** Your log data is stored in the `Log_Archive` folder, located next to the application's executable.

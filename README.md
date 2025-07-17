@@ -13,7 +13,7 @@ A new run will automatically be created when a new log is detected in your arcDP
     * **W/S** or **Up/Down Arrow**: Move selection up and down.
 * **Select:** Press **Enter** or **Spacebar** to choose an Archive, Log, or menu option.
 * **Delete:** Press **Ctrl+D** to delete an Archive or Log.
-* **Zoom:** Use **Ctrl+Plus/Minus** to zoom in/out (requires Windows Terminal).
+* **Zoom:** Use **Ctrl+Plus/Minus** to zoom in/out ([requires Windows Terminal](https://apps.microsoft.com/detail/9n0dx20hk701?hl=en-US&gl=US)).
 * **Quit:** Press **Ctrl+C** or **Q**.
 
 ---
@@ -21,13 +21,13 @@ A new run will automatically be created when a new log is detected in your arcDP
 ## Important Notes
 
 * **arcDPS Log Location:** By default, arcDPS logs are found in `C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs`.
-    * **Learn more:** `https://www.deltaconnected.com/arcdps/`
+    * **Learn more:** [https://www.deltaconnected.com/arcdps/](https://www.deltaconnected.com/arcdps/)
 * **GW2 Commanders Watch Data:** Your log data is stored in the `Log_Archive` folder, located next to the application's executable.
 * **View Detailed Reports:** To see more details on a fight, press **D** to select the Report Dashboard, then press **Enter** or **Spacebar**. The full detailed log will open in your default web browser.
 * **Log Parsing:** This application uses the excellent Gw2 Elite Insights parser.
-    * **Learn more:** `https://github.com/baaron4/GW2-Elite-Insights-Parser`
-    * **.NET 8.0.12** is required for Gw2 Elite Insights parser `https://dotnet.microsoft.com/en-us/download/dotnet/8.0`
+    * **Learn more:** [https://github.com/baaron4/GW2-Elite-Insights-Parser](https://github.com/baaron4/GW2-Elite-Insights-Parser)
+    * **.NET 8.0.12** is required for Gw2 Elite Insights parser [https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
 * **Feedback & Support:**
-    * Report issues or give thanks for GW2 Commanders Watch here: `https://github.com/theextendedname/GW2_Commanders_Watch/`
+    * Report issues or give thanks for GW2 Commanders Watch here: [https://github.com/theextendedname/GW2_Commanders_Watch/](https://github.com/theextendedname/GW2_Commanders_Watch/)
 
 ---

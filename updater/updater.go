@@ -9,7 +9,7 @@ import (
 const (
 	// IMPORTANT: Replace with the actual GitHub repository URL when available
 	repoURL          = "theextendedname/GW2_Commanders_Watch"
-	currentVersion   = "v0.1.0" // This should be updated with each new release
+	currentVersion   = "v0.1.1" // This should be updated with each new release and remember to change func (m *model) renderStatusBar in model.go line 365
 	githubAPIRelease = "https://api.github.com/repos/"
 )
 

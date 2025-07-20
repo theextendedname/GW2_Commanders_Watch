@@ -316,11 +316,14 @@ Quit: Ctrl+C or Q.
 
 Important Notes
 
-arcDPS Logs: Default location is C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs.
+arcDPS Logs: Default location is 
+    (C:\Users\<USERNAME>\Documents\Guild Wars 2\addons\arcdps\arcdps.cbtlogs).
 App Data: GW2 Commanders Watch stores data in Log_Archive next to the executable.
 Detailed Reports: Press D (Report Dashboard), then Enter or Spacebar to open a log in your browser.
-Parser: This app uses the Gw2 Elite Insights Parser (https://github.com/baaron4/GW2-Elite-Insights-Parser).
-Feedback/Support for GW2 Commanders Watch: https://github.com/theextendedname
+Parser: This app uses the Gw2 Elite Insights Parser 
+    (https://github.com/baaron4/GW2-Elite-Insights-Parser).
+Feedback/Support for GW2 Commanders Watch: 
+    (https://github.com/theextendedname/GW2_Commanders_Watch)
 
 `
 		return m.styles.RightPanel.Render(dashText)
@@ -362,7 +365,7 @@ func (m *model) renderStatusBar() string {
 	}
 	w := lipgloss.Width
 	statusWidth := w(statusText)
-	versionInfo := "v0.1.0"
+	versionInfo := "v0.1.1" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
 	versionWidth := w(versionInfo)
 	padding := m.width - statusWidth - versionWidth - m.styles.StatusBar.GetHorizontalFrameSize()
 	if padding < 0 {

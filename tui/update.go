@@ -102,6 +102,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case TempLogProcessedMsg:
 		// This is the entry point for a new, live log.
 		// We parse it here to decide where it goes.
+        m.err = nil // Clear any previous error 
 		parsedLog, err := parser.ParseLog(msg.TempPath)
 		if err != nil {
 			m.err = err

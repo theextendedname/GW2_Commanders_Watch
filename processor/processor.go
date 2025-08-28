@@ -156,7 +156,7 @@ func moveFileWithRetry(src, dest string, retries int) error {
 // waitForFile polls for a file to exist and then for it to be unlocked.
 func waitForFile(filePath string) (string, error) {
 	// Wait for file to exist
-	timeout := time.After(60 * time.Second) // 30-second timeout for file creation
+	timeout := time.After(300 * time.Second) // 30-second timeout for file creation
 	ticker := time.NewTicker(250 * time.Millisecond)
 	defer ticker.Stop()
 
@@ -177,7 +177,7 @@ func waitForFile(filePath string) (string, error) {
 
 UNLOCK_CHECK:
 	// Wait for file to be unlocked
-	timeout = time.After(60 * time.Second) // 30-second timeout for file unlock
+	timeout = time.After(300 * time.Second) // 30-second timeout for file unlock
 	for {
 		select {
 		case <-timeout:

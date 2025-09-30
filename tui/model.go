@@ -209,9 +209,9 @@ func (m model) View() string {
 
 	if m.focusedPanel == leftPanel {
 		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.AccentCyan)
-		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.Gray)
+		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.AccentPink)
 	} else {
-		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.Gray)
+		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.AccentPink)
 		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.AccentCyan)
 	}
 
@@ -365,7 +365,7 @@ func (m *model) renderStatusBar() string {
 	}
 	w := lipgloss.Width
 	statusWidth := w(statusText)
-	versionInfo := "v0.1.4" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
+	versionInfo := "v0.1.5" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
 	versionWidth := w(versionInfo)
 	padding := m.width - statusWidth - versionWidth - m.styles.StatusBar.GetHorizontalFrameSize()
 	if padding < 0 {
@@ -385,27 +385,60 @@ func (m *model) renderHelpBar() string {
 	return lipgloss.JoinVertical(lipgloss.Left, m.styles.HelpBar.Render(helpLine1), m.styles.HelpBar.Render(helpLine2))
 }
 
-// formatNumber adds comma separators to an integer.
+
+
+// formatNumber adds comma separators to an integer and prepends a '0'
+// for values between 0 and 9 (inclusive).
 func formatNumber(n int) string {
-	in := strconv.Itoa(n)
-	out := make([]byte, len(in)+(len(in)-1)/3)
-	if n < 0 {
-		in = in[1:]
+	// Handle the zero-padding requirement first for values from 0 to 9.
+	// This should only apply to non-negative numbers.
+	if n >= 0 && n <= 9 {
+		return fmt.Sprintf("0%d", n)
 	}
+
+	// For all other numbers (including negative numbers and numbers >= 10),
+	// proceed with the comma formatting logic.
+
+	in := strconv.Itoa(n)
+	isNegative := n < 0
+	
+	// If the number is negative, we need to work with the absolute value string
+	// for the comma placement, and add the negative sign back later.
+	if isNegative {
+		in = in[1:] // Remove the '-' sign for formatting
+	}
+
+	// Calculate the size of the output string:
+	// Length of digits + (number of commas, which is (len(in) - 1) / 3)
+	outLength := len(in) + (len(in)-1)/3
+	out := make([]byte, outLength)
+
+	// i: index for the input string 'in' (starting from the last digit)
+	// j: index for the output byte slice 'out' (starting from the last position)
+	// k: counter for digits between commas
 	for i, j, k := len(in)-1, len(out)-1, 0; ; i, j = i-1, j-1 {
+		// 1. Copy the digit
 		out[j] = in[i]
+		
+		// 2. Check for the end of the number string
 		if i == 0 {
-			if n < 0 {
-				return "-" + string(out)
+			result := string(out)
+			if isNegative {
+				return "-" + result
 			}
-			return string(out)
+			return result
 		}
-		if k++; k == 3 {
-			j, k = j-1, 0
-			out[j] = ','
+
+		// 3. Increment digit counter and check if a comma is needed
+		k++
+		if k == 3 {
+			j, k = j-1, 0 // Move output index back one for the comma, reset digit counter
+			out[j] = ','  // Insert the comma
 		}
 	}
 }
+
+
 
 // Card Builder Functions
 // Point represents a 2D coordinate
@@ -449,6 +482,7 @@ func (m *model) buildBannerInfoCard(log *parser.ParsedLog) string {
 func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 	var squadDmg, squadDps, squadDowns, squadDeaths, enemyCount, redEnemyCount, greenEnemyCount, blueEnemyCount, enemyDmg, enemyDps, enemyDowns, enemyDeaths int
 	var inSquadCount, notInSquadCount, zergCount int
+    //team id mapings from Elite-Insights-Parser json
     teams := map[int]string{
         698:  "Red",
         705:  "Red",
@@ -518,13 +552,17 @@ func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 		}
 	}
 	var sb strings.Builder	
-    rowStr := fmt.Sprintf("%-18s %-12s %-8s %-5s %s ", "Fight Balance", "DMG", "DPS", "Downs", "Deaths")
+    rowStr := fmt.Sprintf("%-19s %-12s %-8s %-5s %s ", "Fight Balance", "DMG", "DPS", "Downs", "Deaths")
 	sb.WriteString(m.styles.CardTitle.Render(rowStr) + "\n")
-    coloredredEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentRed).Render(fmt.Sprintf("%-2d", redEnemyCount))
-    coloredgreenEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentGreen).Render(fmt.Sprintf("%-2d", greenEnemyCount))
-    coloredblueEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentBlue).Render(fmt.Sprintf("%-2d", blueEnemyCount))
-    sb.WriteString(fmt.Sprintf("Squad %-2d(%-2d/%-2d)    %-12s %-8s %-5s %s", zergCount, inSquadCount, notInSquadCount, formatNumber(squadDmg), formatNumber(squadDps), formatNumber(squadDowns), formatNumber(squadDeaths)) + "\n")
-	sb.WriteString(fmt.Sprintf("Enemy %-2d(%-2s/%-2s/%-2s) %-12s %-8s %-5s %s", enemyCount, coloredredEnemyCount, coloredgreenEnemyCount,  coloredblueEnemyCount, formatNumber(enemyDmg), formatNumber(enemyDps), formatNumber(enemyDowns), formatNumber(enemyDeaths)))
+    // The format specifier "%02d" achieves the desired result:
+	// %d: standard decimal integer.
+	// 2: minimum width of the field is 2 characters.
+	// 0: pad the field with zeros instead of spaces.
+    coloredredEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentRed).Render(fmt.Sprintf("%02d", redEnemyCount))
+    coloredgreenEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentGreen).Render(fmt.Sprintf("%02d", greenEnemyCount))
+    coloredblueEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentBlue).Render(fmt.Sprintf("%02d", blueEnemyCount))
+    sb.WriteString(fmt.Sprintf("Squad %03d(%02d/%02d)    %-12s %-8s %-5s %s", zergCount, inSquadCount, notInSquadCount, formatNumber(squadDmg), formatNumber(squadDps), formatNumber(squadDowns), formatNumber(squadDeaths)) + "\n")
+	sb.WriteString(fmt.Sprintf("Enemy %03d(%02s/%02s/%02s) %-12s %-8s %-5s %s", enemyCount, coloredredEnemyCount, coloredgreenEnemyCount,  coloredblueEnemyCount, formatNumber(enemyDmg), formatNumber(enemyDps), formatNumber(enemyDowns), formatNumber(enemyDeaths)))
 	return sb.String()
 }
 
@@ -912,7 +950,7 @@ type Styles struct {
 func NewStyles(theme ShadesOfPurple) Styles {
 	cardStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
-		BorderForeground(theme.Gray).Padding(0, 0).Margin(0, 0, 0, 0)
+		BorderForeground(theme.AccentPink).Padding(0, 0).Margin(0, 0, 0, 0)
 	return Styles{
 		LeftPanel: lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).

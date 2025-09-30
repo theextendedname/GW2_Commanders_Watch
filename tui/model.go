@@ -447,8 +447,23 @@ func (m *model) buildBannerInfoCard(log *parser.ParsedLog) string {
 }
 
 func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
-	var squadDmg, squadDps, squadDowns, squadDeaths, enemyCount, enemyDmg, enemyDps, enemyDowns, enemyDeaths int
+	var squadDmg, squadDps, squadDowns, squadDeaths, enemyCount, redEnemyCount, greenEnemyCount, blueEnemyCount, enemyDmg, enemyDps, enemyDowns, enemyDeaths int
 	var inSquadCount, notInSquadCount, zergCount int
+    teams := map[int]string{
+        698:  "Red",
+        705:  "Red",
+        706:  "Red",
+        882:  "Red",
+        2520: "Red",
+        2739: "Green",
+        2741: "Green",
+        2752: "Green",
+        2763: "Green",
+        432:  "Blue",
+        1277: "Blue",
+    }
+    
+
 	for _, p := range log.Players {
 		if p.NotInSquad {
 			notInSquadCount++
@@ -484,6 +499,16 @@ func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 	for _, t := range log.Targets {
 		if t.EnemyPlayer && !t.IsFakeTarget {
 			enemyCount++
+            value, ok := teams[int(t.TeamId)]
+			if ok {
+				if value == "Red" {
+					redEnemyCount++
+				} else if value == "Green" {
+					greenEnemyCount++
+				} else if value == "Blue" {
+					blueEnemyCount++
+				}
+			}            
 			if len(t.StatsAll) > 0 {
 				enemyDmg += t.StatsAll[0].Dmg
 			}
@@ -492,11 +517,14 @@ func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 			}
 		}
 	}
-	var sb strings.Builder
-	rowStr := fmt.Sprintf("%-15s %-12s %-8s %-5s %s ", "Fight Balance", "DMG", "DPS", "Downs", "Deaths")
+	var sb strings.Builder	
+    rowStr := fmt.Sprintf("%-18s %-12s %-8s %-5s %s ", "Fight Balance", "DMG", "DPS", "Downs", "Deaths")
 	sb.WriteString(m.styles.CardTitle.Render(rowStr) + "\n")
-	sb.WriteString(fmt.Sprintf("Squad %-2d(%-2d/%-2d) %-12s %-8s %-5s %s", zergCount, inSquadCount, notInSquadCount, formatNumber(squadDmg), formatNumber(squadDps), formatNumber(squadDowns), formatNumber(squadDeaths)) + "\n")
-	sb.WriteString(fmt.Sprintf("Enemy %-9d %-12s %-8s %-5s %s", enemyCount, formatNumber(enemyDmg), formatNumber(enemyDps), formatNumber(enemyDowns), formatNumber(enemyDeaths)))
+    coloredredEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentRed).Render(fmt.Sprintf("%-2d", redEnemyCount))
+    coloredgreenEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentGreen).Render(fmt.Sprintf("%-2d", greenEnemyCount))
+    coloredblueEnemyCount := lipgloss.NewStyle().Foreground(m.theme.AccentBlue).Render(fmt.Sprintf("%-2d", blueEnemyCount))
+    sb.WriteString(fmt.Sprintf("Squad %-2d(%-2d/%-2d)    %-12s %-8s %-5s %s", zergCount, inSquadCount, notInSquadCount, formatNumber(squadDmg), formatNumber(squadDps), formatNumber(squadDowns), formatNumber(squadDeaths)) + "\n")
+	sb.WriteString(fmt.Sprintf("Enemy %-2d(%-2s/%-2s/%-2s) %-12s %-8s %-5s %s", enemyCount, coloredredEnemyCount, coloredgreenEnemyCount,  coloredblueEnemyCount, formatNumber(enemyDmg), formatNumber(enemyDps), formatNumber(enemyDowns), formatNumber(enemyDeaths)))
 	return sb.String()
 }
 

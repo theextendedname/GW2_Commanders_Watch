@@ -134,6 +134,7 @@ type Target struct {
 	StatsAll     []TargetStats   `json:"statsAll"`
 	DpsAll       []TargetDps     `json:"dpsAll"`
 	Defenses     []TargetDefense `json:"defenses"`
+	TeamId       int64           `json:"teamID"`
 }
 
 type TargetStats struct {

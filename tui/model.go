@@ -209,9 +209,9 @@ func (m model) View() string {
 
 	if m.focusedPanel == leftPanel {
 		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.AccentCyan)
-		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.AccentPink)
+		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.NeonPinkBorder)
 	} else {
-		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.AccentPink)
+		m.styles.LeftPanel = m.styles.LeftPanel.BorderForeground(m.theme.NeonPinkBorder)
 		m.styles.RightPanel = m.styles.RightPanel.BorderForeground(m.theme.AccentCyan)
 	}
 
@@ -950,7 +950,7 @@ type Styles struct {
 func NewStyles(theme ShadesOfPurple) Styles {
 	cardStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
-		BorderForeground(theme.AccentPink).Padding(0, 0).Margin(0, 0, 0, 0)
+		BorderForeground(theme.NeonPinkBorder).Padding(0, 0).Margin(0, 0, 0, 0)
 	return Styles{
 		LeftPanel: lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).

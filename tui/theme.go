@@ -25,6 +25,7 @@ type ShadesOfPurple struct {
 	AccentLightPurple lipgloss.Color
 	AccentDarkPurple  lipgloss.Color
 	AccentTeal        lipgloss.Color
+    NeonPinkBorder    lipgloss.Color                  
 }
 
 // NewShadesOfPurple creates and returns a new ShadesOfPurple color palette.
@@ -50,5 +51,6 @@ func NewShadesOfPurple() ShadesOfPurple {
 		AccentLightPurple: lipgloss.Color("#c991ff"),
 		AccentDarkPurple:  lipgloss.Color("#6943ff"),
 		AccentTeal:        lipgloss.Color("#2ee2fa"),
+        NeonPinkBorder:    lipgloss.Color("#fe019a"),
 	}
 }

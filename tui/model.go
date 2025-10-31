@@ -365,7 +365,7 @@ func (m *model) renderStatusBar() string {
 	}
 	w := lipgloss.Width
 	statusWidth := w(statusText)
-	versionInfo := "v0.1.5" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
+	versionInfo := "v0.1.6" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
 	versionWidth := w(versionInfo)
 	padding := m.width - statusWidth - versionWidth - m.styles.StatusBar.GetHorizontalFrameSize()
 	if padding < 0 {
@@ -482,18 +482,22 @@ func (m *model) buildBannerInfoCard(log *parser.ParsedLog) string {
 func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 	var squadDmg, squadDps, squadDowns, squadDeaths, enemyCount, redEnemyCount, greenEnemyCount, blueEnemyCount, enemyDmg, enemyDps, enemyDowns, enemyDeaths int
 	var inSquadCount, notInSquadCount, zergCount int
-    //team id mapings from Elite-Insights-Parser json
-    teams := map[int]string{
-        698:  "Red",
-        705:  "Red",
-        706:  "Red",
-        882:  "Red",
+    //team id mappings from Elite-Insights-Parser json
+    teams := map[int]string{        
+        0: "Unk",
+        705: "Red",
+        706: "Red",
+        707: "Red",
+        882: "Red",
+        885: "Red",
         2520: "Red",
         2739: "Green",
         2741: "Green",
         2752: "Green",
         2763: "Green",
-        432:  "Blue",
+        2767: "Green",
+        432: "Blue",
+        433: "Blue",
         1277: "Blue",
     }
     

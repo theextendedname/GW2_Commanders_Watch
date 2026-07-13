@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 )
@@ -26,9 +27,15 @@ func ProcessLog(logPath string) (string, error) {
 	// 2. Run Elite Insights CLI
 	cliPath := filepath.Join("GW2EICLI", "GuildWars2EliteInsights-CLI.exe")
 	confPath := "ELI3.conf"
-	cmd := exec.Command(cliPath, "-c", confPath, logPath)
+	cmd, err := eliteInsightsCommand(cliPath, confPath, logPath)
+	if err != nil {
+		return "", err
+	}
 
 	output, err := cmd.CombinedOutput()
+	if runtime.GOOS == "linux" {
+		output = filterWineFixme(output)
+	}
 
 	// Check for specific .NET error
 	if strings.Contains(string(output), "You must install .NET to run this application") {
@@ -52,6 +59,54 @@ func ProcessLog(logPath string) (string, error) {
 	}
 
 	return unlockedJSONPath, nil
+}
+
+func eliteInsightsCommand(cliPath, confPath, logPath string) (*exec.Cmd, error) {
+	if runtime.GOOS != "linux" {
+		return exec.Command(cliPath, "-c", confPath, logPath), nil
+	}
+
+	winePath, err := exec.LookPath("wine")
+	if err != nil {
+		return nil, fmt.Errorf("Wine is required to run Elite Insights on Linux: %w", err)
+	}
+
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		return nil, fmt.Errorf("could not determine home directory for Wine prefix: %w", err)
+	}
+	winePrefix := filepath.Join(homeDir, ".wine-dotnet8")
+	if _, err := os.Stat(winePrefix); err != nil {
+		if os.IsNotExist(err) {
+			return nil, fmt.Errorf("Wine prefix %s was not found; create it and install the required .NET runtime", winePrefix)
+		}
+		return nil, fmt.Errorf("could not access Wine prefix %s: %w", winePrefix, err)
+	}
+
+	cmd := exec.Command(winePath, cliPath, "-c", confPath, logPath)
+	for _, variable := range os.Environ() {
+		if strings.HasPrefix(variable, "WINEDEBUG=") || strings.HasPrefix(variable, "WINEPREFIX=") || strings.HasPrefix(variable, "DOTNET_gcServer=") {
+			continue
+		}
+		cmd.Env = append(cmd.Env, variable)
+	}
+	cmd.Env = append(cmd.Env,
+		"WINEDEBUG=-all",
+		"WINEPREFIX="+winePrefix,
+		"DOTNET_gcServer=1",
+	)
+	return cmd, nil
+}
+
+func filterWineFixme(output []byte) []byte {
+	lines := strings.SplitAfter(string(output), "\n")
+	filtered := lines[:0]
+	for _, line := range lines {
+		if !strings.Contains(line, "fixme:") {
+			filtered = append(filtered, line)
+		}
+	}
+	return []byte(strings.Join(filtered, ""))
 }
 
 // ArchiveLogFiles moves the generated .json and .html files from the temp folder to the final run archive directory.

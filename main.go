@@ -170,7 +170,7 @@ func promptForConfig(configPath string) (config.Config, error) {
 			defaultPath = potentialPath
 		}
 	}
-	if defaultPath == "" {
+	if defaultPath == "" && runtime.GOOS == "windows" {
 		// run CLI fallback
 		cmd := exec.Command("powershell", "-ExecutionPolicy", "Bypass", "-Command", "$HOME")
 		output, err := cmd.CombinedOutput()
@@ -193,7 +193,11 @@ func promptForConfig(configPath string) (config.Config, error) {
 
 			// If no default path, just prompt normally
 			baseStyle := lipgloss.NewStyle().Background(lipgloss.Color("#A5FF90")).Foreground(lipgloss.Color("#2d2b57")).Padding(0, 1)
-			fmt.Print(baseStyle.Render("Default location is (C:\\Users\\<USERNAME>\\Documents\\Guild Wars 2\\addons\\arcdps\\arcdps.cbtlogs)"))
+			if runtime.GOOS == "windows" {
+				fmt.Print(baseStyle.Render("Default location is (C:\\Users\\<USERNAME>\\Documents\\Guild Wars 2\\addons\\arcdps\\arcdps.cbtlogs)"))
+			} else {
+				fmt.Print(baseStyle.Render("No default ArcDPS log folder was found."))
+			}
 			fmt.Print(baseStyle.Render("Enter the absolute path for your ArcDPS log folder (WatchFolder):"))
 
 		}

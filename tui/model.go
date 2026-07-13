@@ -365,7 +365,7 @@ func (m *model) renderStatusBar() string {
 	}
 	w := lipgloss.Width
 	statusWidth := w(statusText)
-	versionInfo := "v0.1.6" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
+	versionInfo := "v0.1.7" // This should be updated with each new release and remember to change currentVersion in updater.go line 12
 	versionWidth := w(versionInfo)
 	padding := m.width - statusWidth - versionWidth - m.styles.StatusBar.GetHorizontalFrameSize()
 	if padding < 0 {

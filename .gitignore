@@ -11,3 +11,4 @@ spec.md
 config.json
 debug.log
 ELI3.conf
+/Release/*

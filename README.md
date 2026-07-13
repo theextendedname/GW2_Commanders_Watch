@@ -29,6 +29,8 @@ A new run will automatically be created when a new log is detected in your arcDP
     * **Learn more:** [https://github.com/baaron4/GW2-Elite-Insights-Parser](https://github.com/baaron4/GW2-Elite-Insights-Parser)
     * **.NET 8.0.12** is required for Gw2 Elite Insights parser [https://dotnet.microsoft.com/en-us/download/dotnet/8.0](https://dotnet.microsoft.com/en-us/download/dotnet/8.0)
     * **Linux:** Install Wine and create `$HOME/.wine-dotnet8` with the required .NET runtime. The app automatically runs the downloaded Windows Elite Insights CLI through that Wine prefix.
+       * Create Prefix ``WINEPREFIX="$HOME/.wine-dotnet8" winecfg``
+       * Install .net8 under that prefix ``WINEPREFIX= ~/.wine-dotnet8 wine /path/to/your/dotnet-sdk-8.0.422-win-x64.exe``
 * **Feedback & Support:**
     * Report issues or give thanks for GW2 Commanders Watch here: [https://github.com/theextendedname/GW2_Commanders_Watch/](https://github.com/theextendedname/GW2_Commanders_Watch/)
 

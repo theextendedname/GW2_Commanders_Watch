@@ -483,22 +483,31 @@ func (m *model) buildSummaryCard(log *parser.ParsedLog) string {
 	var squadDmg, squadDps, squadDowns, squadDeaths, enemyCount, redEnemyCount, greenEnemyCount, blueEnemyCount, enemyDmg, enemyDps, enemyDowns, enemyDeaths int
 	var inSquadCount, notInSquadCount, zergCount int
     //team id mappings from Elite-Insights-Parser json
-    teams := map[int]string{        
+    teams := map[int]string{
         0: "Unk",
+        697: "Red",
         705: "Red",
         706: "Red",
         707: "Red",
         882: "Red",
         885: "Red",
+        886: "Red",
+        887: "Red",
         2520: "Red",
+        2543: "Red",
+        2552: "Red",
         2739: "Green",
         2741: "Green",
         2752: "Green",
         2763: "Green",
         2767: "Green",
+        2778: "Green",
         432: "Blue",
         433: "Blue",
         1277: "Blue",
+        1282: "Blue",
+        1283: "Blue",
+        1989: "Blue",
     }
     
 
